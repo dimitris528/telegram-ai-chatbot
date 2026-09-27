@@ -206,3 +206,21 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ---------------------------------------------------------------------------
+# Project-specific
+# ---------------------------------------------------------------------------
+# Secrets: keep only the template
+.env.*
+!.env.example
+# Runtime conversation data (contains user messages)
+data/
+*.db
+*.db-shm
+*.db-wal
+memory.json
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
