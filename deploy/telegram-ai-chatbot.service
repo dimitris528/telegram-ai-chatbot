@@ -1,0 +1,32 @@
+# systemd unit for running the bot on a Linux VM.
+#   sudo cp deploy/telegram-ai-chatbot.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now telegram-ai-chatbot
+#   journalctl -u telegram-ai-chatbot -f
+[Unit]
+Description=Telegram AI chatbot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=telegram-bot
+Group=telegram-bot
+WorkingDirectory=/opt/telegram-ai-chatbot
+EnvironmentFile=/opt/telegram-ai-chatbot/.env
+Environment=DB_PATH=/var/lib/telegram-ai-chatbot/conversations.db
+ExecStart=/opt/telegram-ai-chatbot/.venv/bin/python -m bot
+Restart=on-failure
+RestartSec=5
+
+# Hardening
+StateDirectory=telegram-ai-chatbot
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

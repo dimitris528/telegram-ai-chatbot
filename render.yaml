@@ -1,0 +1,23 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Long polling needs no public URL, so the bot runs as a Background Worker.
+services:
+  - type: worker
+    name: telegram-ai-chatbot
+    runtime: docker
+    plan: starter
+    autoDeploy: true
+    envVars:
+      - key: TELEGRAM_TOKEN
+        sync: false # set in the Render dashboard, never committed
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: LOG_LEVEL
+        value: INFO
+    # Persist conversation history across deploys (disks require a paid plan).
+    # Without a disk the bot still works; history resets on each deploy.
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1
